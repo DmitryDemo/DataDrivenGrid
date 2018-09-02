@@ -1,5 +1,8 @@
 package datadriven.base;
 
+import com.relevantcodes.extentreports.ExtentReports;
+import com.relevantcodes.extentreports.ExtentTest;
+import com.relevantcodes.extentreports.LogStatus;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Platform;
@@ -11,7 +14,10 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.BeforeTest;
+import utilities.ExtentManager;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -37,15 +43,17 @@ public class TestBase {
     - ExtentReport
      */
 
-    public static ThreadLocal<RemoteWebDriver> threadLocal = new ThreadLocal<RemoteWebDriver>();
+    public static ThreadLocal<RemoteWebDriver> remoteDriver = new ThreadLocal<RemoteWebDriver>();
     public RemoteWebDriver driver = null;
     public Properties OR = new Properties();
     public Properties config = new Properties();
     public FileInputStream fis;
     public Logger log = Logger.getLogger("devpinoyLogger");
     public WebDriverWait wait;
+    public ExtentReports report = ExtentManager.getInstance();
+    public ExtentTest test;
+    public static ThreadLocal<ExtentTest> extentTest = new ThreadLocal<ExtentTest>();
 
-    @BeforeSuite
     public void setUp() {
 
         if (driver == null) {
@@ -96,10 +104,12 @@ public class TestBase {
         setDriver(driver);
         getDriver().manage().timeouts().implicitlyWait(Integer.parseInt(config.getProperty("implicit.wait")), TimeUnit.SECONDS);
         getDriver().manage().window().maximize();
+        getExtentTest().log(LogStatus.INFO, String.format("Browser '%s' opened.", browser));
     }
 
     public void navigate(String url) {
         getDriver().get(url);
+        getExtentTest().log(LogStatus.INFO, "Navigating to " + url);
     }
 
     public void openBasePage() {
@@ -133,12 +143,30 @@ public class TestBase {
         }
     }
 
+    public void logTestPassed(String testName) {
+        getExtentTest().log(LogStatus.PASS, testName + " executed successfully!");
+    }
+
+    public void logTestFailed(String testName) {
+        getExtentTest().log(LogStatus.FAIL, testName + " failed!");
+        // take screenshot
+        Assert.fail(testName + " failed!");
+    }
+
     public WebDriver getDriver() {
-        return threadLocal.get();
+        return remoteDriver.get();
     }
 
     public void setDriver(RemoteWebDriver driver) {
-        threadLocal.set(driver);
+        remoteDriver.set(driver);
+    }
+
+    public ExtentTest getExtentTest() {
+        return extentTest.get();
+    }
+
+    public void setExtentTest(ExtentTest extentTest) {
+        this.extentTest.set(extentTest);
     }
 
     private WebElement getElement(String locator) {

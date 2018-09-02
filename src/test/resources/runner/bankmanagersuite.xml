@@ -7,4 +7,9 @@
             <class name="suite.bankmanager.testcases.AddCustomerTest"/>
         </classes>
     </test>
+    <test name="OpenAccountTest">
+        <classes>
+            <class name="suite.bankmanager.testcases.OpenAccountTest"/>
+        </classes>
+    </test>
 </suite>

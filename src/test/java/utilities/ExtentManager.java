@@ -4,6 +4,8 @@ import com.relevantcodes.extentreports.DisplayOrder;
 import com.relevantcodes.extentreports.ExtentReports;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ExtentManager {
 
@@ -11,8 +13,9 @@ public class ExtentManager {
 
     public static ExtentReports getInstance() {
         if (extent == null) {
+            String reportName = "Extent_Report_" + new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(new Date()) + ".html";
             extent = new ExtentReports(System.getProperty("user.dir")
-                    + "\\target\\surefire-reports\\html\\extent.html" ,true, DisplayOrder.OLDEST_FIRST);
+                    + "\\reports\\" + reportName ,true, DisplayOrder.OLDEST_FIRST);
             extent.loadConfig(new File(System.getProperty("user.dir") + "\\src\\test\\resources\\extentconfig\\ReportsConfig.xml"));
         }
         return extent;
