@@ -9,7 +9,7 @@ public class DataProviders {
 	
 	
 	
-	@DataProvider(name="bankManagerDP",parallel=true)
+	@DataProvider(name="bankManagerDP", parallel=true)
 	public static Object[][] getDataSuite1(Method m) {
 
 		System.out.println(m.getName());

@@ -5,11 +5,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 
 import java.io.FileInputStream;
@@ -70,23 +71,21 @@ public class TestBase {
         }
     }
 
-    @AfterSuite
-    public void tearDown() {
-        getDriver().quit();
-    }
-
     public void openBrowser(String browser) throws MalformedURLException {
 
         DesiredCapabilities capabilities = null;
 
         if ("firefox".equalsIgnoreCase(browser)) {
+            System.setProperty("webdriver.gecko.driver", System.getProperty("user.dir") + "\\src\\test\\resources\\executables\\geckodriver.exe");
+            FirefoxOptions options = new FirefoxOptions();
             capabilities = DesiredCapabilities.firefox();
+            capabilities.setCapability(FirefoxOptions.FIREFOX_OPTIONS, options);
             capabilities.setBrowserName("firefox");
             capabilities.setPlatform(Platform.ANY);
         } else if ("chrome".equalsIgnoreCase(browser)) {
+            ChromeOptions options = new ChromeOptions();
             capabilities = DesiredCapabilities.chrome();
-            capabilities.setBrowserName("chrome");
-            capabilities.setPlatform(Platform.ANY);
+            capabilities.setCapability(ChromeOptions.CAPABILITY, options);
         } else if ("ie".equalsIgnoreCase(browser)) {
             capabilities = DesiredCapabilities.internetExplorer();
             capabilities.setBrowserName("iexplore");
@@ -103,7 +102,7 @@ public class TestBase {
         getDriver().get(url);
     }
 
-    public void navigate() {
+    public void openBasePage() {
         navigate(config.getProperty("testsiteurl"));
     }
 
