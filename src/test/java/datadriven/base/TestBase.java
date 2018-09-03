@@ -163,12 +163,16 @@ public class TestBase {
     public void captureScreenshot() {
 
         File scrFile = ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.FILE);
-        screenshotName = "Screenshot_" + new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(new Date()) + ".jpeg";
+
+        screenshotName = "Screenshot_" + new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(new Date()) + ".jpg";
+
         try {
-            FileUtils.copyFile(scrFile, new File(System.getProperty("user.dir") + "\\reports\\screenshots\\" + screenshotName));
+            FileUtils.copyFile(scrFile,
+                    new File(System.getProperty("user.dir") + "\\reports\\" + screenshotName));
         } catch (IOException e) {}
-        getExtentTest().log(LogStatus.INFO, "<span class=\"label label-fail\">Error!</span> ", getExtentTest().addScreenCapture(
-                System.getProperty("user.dir") + "\\reports\\screenshots\\" + screenshotName));
+
+
+        getExtentTest().log(LogStatus.INFO,  " Screenshot -> "+ test.addScreenCapture(screenshotName));
     }
 
     public void logTestPassed(String testName) {
