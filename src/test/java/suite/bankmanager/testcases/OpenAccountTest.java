@@ -20,6 +20,11 @@ public class OpenAccountTest extends TestBase {
         DataUtil.checkExecution("BankManagerSuite", "OpenAccountTest", data.get("Runmode"), excel);
         openBrowser(data.get("browser"));
         openBasePage();
+        click("bmlBtn_CSS");
+        click("openaccount_CSS");
+        select("customer_CSS", data.get("customer"));
+        select("currency_CSS", data.get("currency"));
+        click("process_CSS");
         logTestPassed("Open Account Test");
     }
 }

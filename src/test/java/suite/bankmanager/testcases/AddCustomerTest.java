@@ -22,6 +22,12 @@ public class AddCustomerTest extends TestBase {
         DataUtil.checkExecution("BankManagerSuite", "AddCustomerTest", data.get("Runmode"), excel);
         openBrowser(data.get("browser"));
         openBasePage();
+        click("bmlBtn_CSS");
+        click("addCustBtn_CSS");
+        type("firstname_CSS", data.get("firstname"));
+        type("lastname_XPATH", data.get("lastname"));
+        type("postcode_CSS", data.get("postcode"));
+        click("addbtn_CSS");
         logTestPassed("Add Customer Test");
     }
 

@@ -3,11 +3,9 @@ package datadriven.base;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Platform;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -15,15 +13,16 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.BeforeTest;
 import utilities.ExtentManager;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -53,6 +52,8 @@ public class TestBase {
     public ExtentReports report = ExtentManager.getInstance();
     public ExtentTest test;
     public static ThreadLocal<ExtentTest> extentTest = new ThreadLocal<ExtentTest>();
+    public static String screenshotPath;
+    public static String screenshotName;
 
     public void setUp() {
 
@@ -118,20 +119,36 @@ public class TestBase {
 
     public void click(String locator) {
 
-        getElement(locator).click();
+        try {
+            getElement(locator).click();
+        } catch (Throwable throwable) {
+            logTestFailed(String.format("Cannot click the %s element.", locator));
+        }
+        getExtentTest().log(LogStatus.INFO, String.format("Click %s button.", locator));
     }
 
     public void type(String locator, String value) {
 
-        getElement(locator).sendKeys(value);
+        try {
+            getElement(locator).sendKeys(value);
+        } catch (Throwable thr) {
+            logTestFailed(String.format("Failed because cannot type '%s' value into %s field.", value, locator));
+        }
+        getExtentTest().log(LogStatus.INFO, String.format("Type '%s' text into %s field.", value, locator));
     }
 
     static WebElement dropdown;
 
     public void select(String locator, String value) {
 
-            Select select = new Select(getElement(locator));
-            select.selectByVisibleText(value);
+            try {
+                Select select = new Select(getElement(locator));
+                select.selectByVisibleText(value);
+            } catch (Throwable throwable) {
+                logTestFailed(String.format("Failed because cannot select '%s' value in %s select.", value, locator));
+            }
+
+            getExtentTest().log(LogStatus.INFO, String.format("Select '%s' option from %s select.", value, locator));
     }
 
     public boolean isElementPresent(By by) {
@@ -143,13 +160,24 @@ public class TestBase {
         }
     }
 
+    public void captureScreenshot() {
+
+        File scrFile = ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.FILE);
+        screenshotName = "Screenshot_" + new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(new Date()) + ".jpeg";
+        try {
+            FileUtils.copyFile(scrFile, new File(System.getProperty("user.dir") + "\\reports\\screenshots\\" + screenshotName));
+        } catch (IOException e) {}
+        getExtentTest().log(LogStatus.INFO, "<span class=\"label label-fail\">Error!</span> ", getExtentTest().addScreenCapture(
+                System.getProperty("user.dir") + "\\reports\\screenshots\\" + screenshotName));
+    }
+
     public void logTestPassed(String testName) {
         getExtentTest().log(LogStatus.PASS, testName + " executed successfully!");
     }
 
     public void logTestFailed(String testName) {
         getExtentTest().log(LogStatus.FAIL, testName + " failed!");
-        // take screenshot
+        captureScreenshot();
         Assert.fail(testName + " failed!");
     }
 
