@@ -47,13 +47,14 @@ public class TestBase {
     public Properties OR = new Properties();
     public Properties config = new Properties();
     public FileInputStream fis;
-    public Logger log = Logger.getLogger("devpinoyLogger");
+    public Logger log = Logger.getLogger("Logger");
     public WebDriverWait wait;
     public ExtentReports report = ExtentManager.getInstance();
     public ExtentTest test;
     public static ThreadLocal<ExtentTest> extentTest = new ThreadLocal<ExtentTest>();
     public static String screenshotPath;
     public static String screenshotName;
+    private String broswer;
 
     public void setUp() {
 
@@ -83,6 +84,7 @@ public class TestBase {
     public void openBrowser(String browser) throws MalformedURLException {
 
         DesiredCapabilities capabilities = null;
+        this.broswer = browser;
 
         if ("firefox".equalsIgnoreCase(browser)) {
             System.setProperty("webdriver.gecko.driver", System.getProperty("user.dir") + "\\src\\test\\resources\\executables\\geckodriver.exe");
@@ -124,6 +126,7 @@ public class TestBase {
         } catch (Throwable throwable) {
             logTestFailed(String.format("Cannot click the %s element.", locator));
         }
+        addLog(String.format("Clicking on an element: %s.", locator));
         getExtentTest().log(LogStatus.INFO, String.format("Click %s button.", locator));
     }
 
@@ -134,6 +137,7 @@ public class TestBase {
         } catch (Throwable thr) {
             logTestFailed(String.format("Failed because cannot type '%s' value into %s field.", value, locator));
         }
+        addLog(String.format("Typing '%s' text into %s element.", value, locator));
         getExtentTest().log(LogStatus.INFO, String.format("Type '%s' text into %s field.", value, locator));
     }
 
@@ -147,7 +151,7 @@ public class TestBase {
             } catch (Throwable throwable) {
                 logTestFailed(String.format("Failed because cannot select '%s' value in %s select.", value, locator));
             }
-
+            addLog(String.format("Selecting '%s' value in %s select.", value, locator));
             getExtentTest().log(LogStatus.INFO, String.format("Select '%s' option from %s select.", value, locator));
     }
 
@@ -168,7 +172,7 @@ public class TestBase {
 
         try {
             FileUtils.copyFile(scrFile,
-                    new File(System.getProperty("user.dir") + "\\reports\\" + screenshotName));
+                    new File(System.getProperty("user.dir") + "\\target\\surefire-reports\\html\\" + screenshotName));
         } catch (IOException e) {}
 
 
@@ -183,6 +187,20 @@ public class TestBase {
         getExtentTest().log(LogStatus.FAIL, testName + " failed!");
         captureScreenshot();
         Assert.fail(testName + " failed!");
+    }
+
+    public void addLog(String message) {
+        log.debug(String.format("Thread : %s. Browser: %s. %s", getThreadValue(remoteDriver.get()), broswer, message));
+    }
+
+    public String getThreadValue(Object value){
+
+        String text = value.toString();
+        String[] nextText = text.split(" ");
+        String text2 = nextText[nextText.length-1].replace("(", "").replace(")", "");
+        String[] newText2 = text2.split("-");
+        String reqText = newText2[newText2.length-1];
+        return reqText;
     }
 
     public WebDriver getDriver() {

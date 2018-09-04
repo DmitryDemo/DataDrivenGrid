@@ -16,7 +16,7 @@ public class ExtentManager {
             String date = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(new Date());
             String reportName = "Extent_Report_" + date + ".html";
             extent = new ExtentReports(System.getProperty("user.dir")
-                    + "\\reports\\" + reportName ,true, DisplayOrder.OLDEST_FIRST);
+                    + "\\target\\surefire-reports\\html\\" + reportName ,true, DisplayOrder.OLDEST_FIRST);
             extent.loadConfig(new File(System.getProperty("user.dir") + "\\src\\test\\resources\\extentconfig\\ReportsConfig.xml"));
         }
         return extent;
