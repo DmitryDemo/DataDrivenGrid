@@ -1,0 +1,15 @@
+17:05:02,076 DEBUG Logger:193 - Thread : 76cbee11512d437fbc0943e123d567b5. Browser: chrome. Clicking on an element: bmlBtn_CSS.
+17:05:03,552 DEBUG Logger:193 - Thread : 76cbee11512d437fbc0943e123d567b5. Browser: chrome. Clicking on an element: openaccount_CSS.
+17:05:04,573 DEBUG Logger:193 - Thread : 76cbee11512d437fbc0943e123d567b5. Browser: chrome. Selecting 'Harry Potter' value in customer_CSS select.
+17:05:04,844 DEBUG Logger:193 - Thread : 76cbee11512d437fbc0943e123d567b5. Browser: chrome. Selecting 'Pound' value in currency_CSS select.
+17:05:16,967 DEBUG Logger:193 - Thread : eb12e10518a0. Browser: firefox. Clicking on an element: bmlBtn_CSS.
+17:05:17,262 DEBUG Logger:193 - Thread : eb12e10518a0. Browser: firefox. Clicking on an element: addCustBtn_CSS.
+17:05:17,376 DEBUG Logger:193 - Thread : eb12e10518a0. Browser: firefox. Typing 'Rahul' text into firstname_CSS element.
+17:05:17,500 DEBUG Logger:193 - Thread : eb12e10518a0. Browser: firefox. Typing 'Arora' text into lastname_XPATH element.
+17:05:17,853 DEBUG Logger:193 - Thread : eb12e10518a0. Browser: firefox. Typing 'D53434' text into postcode_CSS element.
+17:05:18,480 DEBUG Logger:193 - Thread : eb12e10518a0. Browser: firefox. Clicking on an element: addbtn_CSS.
+17:05:18,499 DEBUG cache:45 - Couldn't find template in cache for "Extent.ftl"("en_US", UTF-8, parsed); will try to load it.
+17:05:18,500 DEBUG cache:45 - TemplateLoader.findTemplateSource("Extent_en_US.ftl"): Not found
+17:05:18,501 DEBUG cache:45 - TemplateLoader.findTemplateSource("Extent_en.ftl"): Not found
+17:05:18,502 DEBUG cache:45 - TemplateLoader.findTemplateSource("Extent.ftl"): Found
+17:05:18,502 DEBUG cache:45 - Loading template for "Extent.ftl"("en_US", UTF-8, parsed) from "jar:file:/C:/Users/User/.m2/repository/com/relevantcodes/extentreports/2.41.2/extentreports-2.41.2.jar!/com/relevantcodes/extentreports/view/Extent.ftl"
